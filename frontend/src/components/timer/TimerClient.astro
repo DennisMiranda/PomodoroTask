@@ -1,5 +1,4 @@
 ---
-import FormTimer from "./form-timer.astro"
 import { Icon } from 'astro-icon/components'
 ---
 
@@ -13,10 +12,9 @@ import { Icon } from 'astro-icon/components'
             </div>
         </button>
     </div>
-    <FormTimer />
     <h2 id="timer-task" class="text-[#171212] font-medium text-base">Grocery Shopping</h2>
     <div id="timer-circle" class="flex items-center justify-center border-2 rounded-full size-52">
-        <p id="timer-countdown" class="text-4xl font-medium">10:00</p>
+        <!-- <Timer client:load /> -->
     </div>
     <div id="timer-controls" class="flex items-center gap-4 lg:mt-2.5">
         <button id="btn-start" class="cursor-pointer w-[120px] h-[49px] border-1 p-3 rounded-xl bg-[#171212] hover:animate-squeeze text-[#FFFEFE] font-bold text-lg flex items-center shadow-xl">
@@ -42,14 +40,17 @@ import { Icon } from 'astro-icon/components'
           iconPause = document.getElementById("icon-pause"),
           iconReset = document.getElementById("icon-reset");
 
+
+    
     
     let isPaused = true;
     let nIntervId;
-    let totalSeconds = 10 * 60; // Ejemplo 10 minutos
+    let totalSeconds = 25 * 60; // Ejemplo 10 minutos
     btnReset.classList.add("bg-gray-500");
 
     
-    const startPomodoro = () => {        
+    const startPomodoro = () => {
+             
         if (!nIntervId) {
             nIntervId = setInterval(() => {
                 if (totalSeconds < 0) {
@@ -97,10 +98,10 @@ import { Icon } from 'astro-icon/components'
 
         clearInterval(nIntervId);
         nIntervId = null;
-        totalSeconds = 10 * 60;
+        totalSeconds = 25 * 60;
         isPaused = true;
 
-        timerCountdown.textContent = "10:00";
+        timerCountdown.textContent = "25:00";
 
         // Asegurar que el ícono de "Play" esté visible y "Pause" oculto
         iconPause.classList.add("hidden");
@@ -115,6 +116,7 @@ import { Icon } from 'astro-icon/components'
 
       
     
+    console.log(timerCountdown)
     
     btnStart.addEventListener("click", togglePomodoro);
     btnReset.addEventListener("click", pomodoroReset);

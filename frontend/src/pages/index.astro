@@ -4,6 +4,7 @@ import Header from "../components/Header.astro";
 import TimerClient from "../components/timer/TimerClient.astro";
 import TaskList from "../components/task/TaskList.astro";
 import Cards from "../components/statistics/Cards.astro";
+import TimerClientCopy from "../components/timer/TimerClientCopy.astro";
 ---
 
 <Layout>
@@ -12,7 +13,7 @@ import Cards from "../components/statistics/Cards.astro";
     <!-- Timer Section - -->
     <section class="p-6 rounded-lg shadow-lg lg:col-span-3 bg-gray-400/10 backdrop-blur-xl">
       <!-- <h2 class="mb-4 text-xl font-semibold">Pomodoro Timer</h2> -->
-      <TimerClient client:load />
+      <TimerClientCopy client:load />
     </section>
 
     <!-- Tasks Section -->
