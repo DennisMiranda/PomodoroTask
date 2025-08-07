@@ -3,17 +3,17 @@
 import { PlayIcon, PauseIcon, ArrowPathIcon } from '@heroicons/react/24/solid'
 
 
-export default function TimerControls() {
+export default function TimerControls({ corriendo, iniciarPausar, reiniciar }) {
 
     return(
-        <div id="timer-controls" class="flex items-center gap-4 lg:mt-2.5">
-            <button id="btn-start" class="cursor-pointer w-[120px] h-[49px] border-1 p-3 rounded-xl bg-[#171212] hover:animate-squeeze text-[#FFFEFE] font-bold text-lg flex items-center shadow-xl justify-center-safe">
+        <div className="flex items-center gap-4 lg:mt-2.5">
+            <button className="cursor-pointer w-[120px] h-[49px] border-1 p-3 rounded-xl bg-[#171212] hover:animate-squeeze text-[#FFFEFE] font-bold text-lg flex items-center shadow-xl justify-center-safe" onClick={iniciarPausar}>
                 {<PlayIcon id="icon-play" name="play" className="text-white size-7" />}
-                {<PauseIcon id="icon-pause" name="pause" class="text-white size-7 hidden" />}
-                <p id="btn-text">Start</p>    
+                {<PauseIcon id="icon-pause" name="pause" className="text-white size-7 hidden" />}
+                {corriendo ? "Pause" : "Start"}   
             </button>
-            <button id="btn-reset" class="cursor-pointer border-1 border-[#C6C2C2] p-3 rounded-xl hover:animate-squeeze shadow-xl">
-                {<ArrowPathIcon id="icon-reset" name="reset" class="text-gray-900 size-6" />}
+            <button className="cursor-pointer border-1 border-[#C6C2C2] p-3 rounded-xl hover:animate-squeeze shadow-xl" onClick={reiniciar}>
+                {<ArrowPathIcon id="icon-reset" name="reset" className="text-gray-900 size-6" />}
             </button>
         </div>  
     )
