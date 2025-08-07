@@ -1,7 +1,7 @@
 // Este será el componente padre donde se controlará todo
 import React, { useState, useEffect, useRef } from 'react';
 // import { Icon } from "astro-icon/components"; // No se puede utilizar en React
-import { Cog6ToothIcon, ChevronDownIcon } from '@heroicons/react/24/solid'
+import { Cog6ToothIcon, ChevronUpIcon } from '@heroicons/react/24/solid'
 import TimerController from './TimerController';
 import TimerDisplay from './TimerDisplay';
 import TimerControls from './TimerControls';
@@ -11,6 +11,8 @@ export default function TimerLayout () {
     const [tiempoRestante, setTiempoRestante] = useState(1500); // 25 minutos = 25 * 60 
     const [corriendo, setCorriendo] = useState(false);
     const intervaloRef = useRef(null);
+    const [mostrarOpciones, setMostrarOpciones] = useState(true);
+
 
     // Convertimos el tiempoInicial (string) a segundos cada vez que se selecciona un button
     useEffect(() => {
@@ -46,20 +48,26 @@ export default function TimerLayout () {
         setCorriendo(false);
         clearInterval(intervaloRef.current);
     };
+    const toggleOpciones = () => setMostrarOpciones(prev => !prev);
 
 
     return(
         <section className="flex flex-col gap-6 justify-center items-center">
-            <div class="flex w-full justify-center gap-2 mb-4 md:justify-between">
-                <h1 id="timer-title" class="text-3xl text-[28px] font-bold">Pomodoro Timer</h1>
-                <button id="caret-down" class="transition-transform duration-300 cursor-pointer">
-                    <div class="flex items-center justify-center hover:bg-gray-300 hover:animate-squeeze py-1 px-0.5 rounded-lg">
-                        <Cog6ToothIcon class="size-5"/>
-                        <ChevronDownIcon id="iconMenu" name="arrow-down" class="size-5"/>
-                    </div>
+            <div className="flex w-full justify-center gap-2 mb-4 md:justify-between">
+                <h1 id="timer-title" className="text-3xl text-[28px] font-bold">Pomodoro Timer</h1>
+                <button id="caret-down" onClick={toggleOpciones} className="transition-transform duration-300 cursor-pointer">
+                  <div className="flex items-center justify-center hover:bg-gray-300 hover:animate-squeeze py-1 px-0.5 rounded-lg">
+                    <Cog6ToothIcon className="size-5" />
+                    <ChevronUpIcon
+                      id="iconMenu"
+                      className={`size-5 transition-transform duration-300 ${!mostrarOpciones ? 'rotate-180' : ''}`}
+                    />
+                  </div>
                 </button>
             </div>
-            <TimerController setTiempoInicial={setTiempoInicial}/>
+            {mostrarOpciones && ( // Rendeziración condicional
+              <TimerController setTiempoInicial={setTiempoInicial} />
+            )}
             <TimerDisplay segundos={tiempoRestante} />
             <TimerControls 
                 corriendo={corriendo}
