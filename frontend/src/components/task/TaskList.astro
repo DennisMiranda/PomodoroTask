@@ -1,27 +1,26 @@
 ---
-import FormTask from "./FormTask.astro";
-import TaskItem from "./TaskItem.astro";
-
 import { Icon } from "astro-icon/components";
+import FormTask from "./FormTask.astro";
 ---
 
 <!-- Task component -->
-<div class="p-3 bg-white/30 rounded-2xl">
+<div class="max-h-[90%] p-3 bg-white/30 rounded-2xl flex flex-col">
   <!-- Search input -->
   <div class="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/70">
     <Icon name="search" class="text-black/50" />
     <input
+      id="search-task"
       type="text"
       placeholder="Search Tasks"
-      class="outline-none caret-black/50"
+      class="outline-none caret-black/50 flex-1"
     />
   </div>
 
   <!-- Add Task Form  -->
   <div class="flex rounded-lg cursor-pointer">
     <div
-      class="flex justify-between flex-1 px-2 py-1 mt-3 rounded-lg cursor-pointer hover:bg-white/30"
-      id="btn-add-task"
+      class="flex flex-1 justify-between px-2 py-1 mt-3 cursor-pointer hover:bg-white/30 rounded-lg"
+      id="btn-open-form-task"
     >
       <p>Add Task</p>
       <button class="text-lg"><Icon name="add" /></button>
@@ -29,21 +28,60 @@ import { Icon } from "astro-icon/components";
   </div>
 
   <FormTask />
-  <div class="flex flex-col gap-2">
-    <TaskItem />
-    <TaskItem />
-    <TaskItem />
-    <TaskItem />
-  </div>
+  <ul id="task-list" class="flex flex-col gap-2 overflow-y-auto flex-1"></ul>
 </div>
 
 <script type="module">
-  const btnAddTask = document.getElementById("btn-add-task");
+  import { createTask } from "/src/scripts/tasks.js";
+  import { getTasks } from "/src/scripts/tasksApi.js";
+
+  const btnOpenFormTask = document.getElementById("btn-open-form-task");
   const container = document.getElementById("form-task-container");
 
-  btnAddTask.addEventListener("click", () => {
+  btnOpenFormTask.addEventListener("click", () => {
     container.classList.toggle("invisible");
     container.classList.toggle("h-0");
-    btnAddTask.classList.toggle("formOpen");
+    btnOpenFormTask.classList.toggle("formOpen");
   });
+
+  const { data, success, error } = await getTasks();
+  if (success) {
+    // Render tasks
+    data.forEach((task) => {
+      const element = createTask(task);
+      document.getElementById("task-list").appendChild(element);
+    });
+  } else {
+    console.log(error);
+  }
+
+  //Search task
+  const searchTaskInput = document.getElementById("search-task");
+
+  // Get all tasks
+  const taskList = document.getElementById("task-list");
+
+  // Debounce function
+  function debounce(callback, delay = 500) {
+    let timeout;
+    return (...args) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => callback(...args), delay);
+    };
+  }
+
+  // Search function
+  const handleSearch = () => {
+    const searchValue = searchTaskInput.value.trim().toLowerCase();
+    console.log(searchValue);
+
+    const tasks = Array.from(taskList.children);
+
+    tasks.forEach((element) => {
+      const title = element.dataset.title?.toLowerCase() || "";
+      element.classList.toggle("hidden", !title.includes(searchValue));
+    });
+  };
+
+  searchTaskInput.addEventListener("input", debounce(handleSearch));
 </script>
